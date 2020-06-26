@@ -10,6 +10,7 @@ import java.io.File
 import java.io.FileOutputStream
 
 import com.shinonometn.fx.*
+import com.shinonometn.fx.assets.resourceStream
 
 class FxAppContextImpl(internal val rootStage: Stage) {
 
@@ -23,7 +24,7 @@ class FxAppContextImpl(internal val rootStage: Stage) {
 
     init {
         /* If has custom setting for app, configure app */
-        resourceAsStream("/app.json")?.let {
+        resourceStream("/app.json")?.let {
             handleAppInfo(JsonUtils.objectMapper.readTree(it))
         }
 
@@ -53,7 +54,7 @@ class FxAppContextImpl(internal val rootStage: Stage) {
         }
 
         application["icon"]?.let {
-            rootStage.icons.add(Image(resourceAsStream(it.asText())))
+            rootStage.icons.add(Image(resourceStream(it.asText())))
         }
     }
 

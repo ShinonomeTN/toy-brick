@@ -1,11 +1,11 @@
 package com.shinonometn.fx.app
 
+import com.shinonometn.fx.dispatching.fxDispatch
 import javafx.application.Application
-import javafx.stage.Stage
-import com.shinonometn.fx.*
 import javafx.application.Platform
 import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.stage.Stage
 
 abstract class FxApp(val entryView: () -> Parent, private val init: FxApp.(stage: Stage) -> Unit) : Application() {
     val context by lazy {
@@ -16,7 +16,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: FxApp.(stage
         ApplicationContext.instance.rootStage.scene
     }
 
-    private val onExitActions : MutableList<() -> Unit> = ArrayList()
+    private val onExitActions: MutableList<() -> Unit> = ArrayList()
 
     override fun start(primaryStage: Stage) {
         ApplicationContext.context = FxAppContextImpl(primaryStage)

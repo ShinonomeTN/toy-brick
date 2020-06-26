@@ -1,4 +1,4 @@
-package com.shinonometn.fx
+package com.shinonometn.fx.controls
 
 import javafx.event.ActionEvent
 import javafx.scene.control.Menu
@@ -44,6 +44,6 @@ fun Menu.menuItem(name: String): MenuItem {
     return menuItem;
 }
 
-fun Menu.menuSperator() {
+fun Menu.menuSeparator() {
     items.add(SeparatorMenuItem())
 }
