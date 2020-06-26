@@ -13,12 +13,12 @@ import javafx.stage.Stage
  *
  * Provided some default behavior of our app
  *
- * To initialize an app. EntryViewProvider([entryView]) and [init] actions is required.
+ * To initialize an app. EntryViewProvider([entryView]) is required, and an optional [init] actions .
  *
  * [entryView] provide an entry of the app (Main View)
  * [init] code block will be executed after FxApp initialized but before the Main Windows shown
  * */
-abstract class FxApp(val entryView: () -> Parent, private val init: FxApp.(stage: Stage) -> Unit) : Application() {
+abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stage: Stage) -> Unit)? = null) : Application() {
     /**
      * The context of this app
      * */
@@ -41,7 +41,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: FxApp.(stage
         /* Start config the app view */
         primaryStage.scene = Scene(entryView())
         defaultStageConfiguration(primaryStage)
-        init(primaryStage)
+        init?.let { it(primaryStage) }
 
         fxDispatch {
             primaryStage.show()
