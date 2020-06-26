@@ -1,5 +1,6 @@
 {
   "application": {
-    "name": "Demo"
+    "name": "Demo",
+    "icon" : "/app_icon.png"
   }
 }

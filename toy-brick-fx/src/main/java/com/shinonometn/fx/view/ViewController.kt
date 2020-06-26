@@ -9,11 +9,37 @@ import com.shinonometn.fx.app.ApplicationContext
 import com.shinonometn.fx.dispatching.uiDispatch
 import com.shinonometn.fx.fxLoadView
 
-abstract class ViewController(val viewTemplateName: String) {
+abstract class ViewController {
+
+    /**
+     * Name of this view controller.
+     * It will be use as view name
+     * */
+    private val name: String?
+
     /**
      * View node of this controller
      */
-    val view: Node = fxLoadView(viewTemplateName)
+    val view: Node
+
+    /**
+     * Create a ViewController with a FXML
+     * [fxmlViewName] is the FXML file name, it's the path to FXML file.
+     * @see com.shinonometn.fx.Fx
+     * */
+    constructor(fxmlViewName: String) {
+        this.name = fxmlViewName
+        this.view = fxLoadView(fxmlViewName)
+    }
+
+    /**
+     * Create a ViewController with [viewProvider]
+     * View [name] is optional.
+     * */
+    constructor(viewProvider: () -> Node, name : String? = null) {
+        this.view = viewProvider()
+        this.name = name
+    }
 
     /**
      * Application Context
