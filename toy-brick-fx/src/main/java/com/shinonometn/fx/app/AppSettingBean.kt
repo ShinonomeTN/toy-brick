@@ -4,7 +4,8 @@ import javafx.collections.FXCollections
 import javafx.collections.ObservableMap
 
 open class AppSettingBean(val name: String) {
-    protected val propertyMap: ObservableMap<String, Any> = FXCollections.observableHashMap()
+    private val propertyMap: ObservableMap<String, Any> = FXCollections.observableHashMap()
+
     var properties: MutableMap<String, Any>
         get() = propertyMap
         set(value) = propertyMap.putAll(value)

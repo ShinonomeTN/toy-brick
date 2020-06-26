@@ -6,23 +6,27 @@ import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import javafx.stage.Window
-import com.shinonometn.fx.*
 import java.io.File
 import java.io.FileOutputStream
 
-class FxAppContextImpl(private val rootStage: Stage) {
+import com.shinonometn.fx.*
+
+class FxAppContextImpl(internal val rootStage: Stage) {
 
     val window: Window = rootStage
+
     var windowTitle: String by rootStage.titleProperty()
 
     private val configurations = HashMap<String, AppSettingBean>()
+
     private var appSettingTree: JsonNode? = null
 
     init {
-        val appInfoJsonTree = JsonUtils.objectMapper.readTree(resourceAsStream("/app.json"))
+        /* If has custom setting for app, configure app */
+        resourceAsStream("/app.json")?.let {
+            handleAppInfo(JsonUtils.objectMapper.readTree(it))
+        }
 
-        windowTitle = appInfoJsonTree["application"]["name"].asText()
-        rootStage.icons.add(Image(resourceAsStream(appInfoJsonTree["application"]["icon"].asText())))
 
         val settingFile = File("./settings.json")
         if (settingFile.exists()) {
@@ -37,6 +41,19 @@ class FxAppContextImpl(private val rootStage: Stage) {
                 saveSettings()
                 Platform.exit()
             }
+        }
+    }
+
+    /* Configure app with "app.json" */
+    private fun handleAppInfo(tree: JsonNode) {
+        val application = tree["application"] ?: return
+
+        application["name"]?.let {
+            windowTitle = it.asText()
+        }
+
+        application["icon"]?.let {
+            rootStage.icons.add(Image(resourceAsStream(it.asText())))
         }
     }
 
