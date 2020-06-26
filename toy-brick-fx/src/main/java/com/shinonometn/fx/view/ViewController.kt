@@ -6,8 +6,8 @@ import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.control.ButtonBase
 import com.shinonometn.fx.app.ApplicationContext
+import com.shinonometn.fx.dispatching.uiDispatch
 import com.shinonometn.fx.fxLoadView
-import com.shinonometn.fx.uiDispatch
 
 abstract class ViewController(val viewTemplateName: String) {
     /**
