@@ -16,9 +16,7 @@ class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
 
     val window: Window = rootStage
 
-    val scene by lazy {
-        ApplicationContext.instance.stage.scene
-    }
+    val scene = rootStage.scene
 
     val stage = rootStage
 
@@ -31,7 +29,7 @@ class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
     /**
      * Set the configuration should persistent when app exit
      * */
-    var persistentSettingsOnExit by Delegates.observable(true) { _, _ , new ->
+    var persistentSettingsOnExit by Delegates.observable(false) { _, _ , new ->
         if(new) onEnableConfigPersistent() else onDisableConfigPersistent()
     }
     private fun onDisableConfigPersistent() {
@@ -53,26 +51,12 @@ class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
     private var appSettingTree: JsonNode? = null
 
     init {
-        val settingFile = File("./settings.json")
-        if (settingFile.exists()) {
-            appSettingTree = JsonUtils.toJsonTree(settingFile)
+        configurationFile.takeIf { it.exists() }?.let {
+            appSettingTree = JsonUtils.toJsonTree(it)
         }
 
         app.addExitAction {
             saveSettings()
-        }
-    }
-
-    /* Configure app with "app.json" */
-    private fun handleAppInfo(tree: JsonNode) {
-        val application = tree["application"] ?: return
-
-        application["name"]?.let {
-            stage.title = it.asText()
-        }
-
-        application["icon"]?.let {
-            rootStage.icons.add(Image(resourceStream(it.asText())))
         }
     }
 
