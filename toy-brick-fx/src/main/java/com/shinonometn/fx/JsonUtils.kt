@@ -5,17 +5,22 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 import java.io.InputStream
+import java.io.OutputStream
 
 object JsonUtils {
     internal val objectMapper = ObjectMapper()
-}
 
-fun JsonUtils.toJsonTree(file : File) : JsonNode {
-    return objectMapper.readTree(file)
-}
+    fun toJsonTree(file : File) : JsonNode {
+        return objectMapper.readTree(file)
+    }
 
-fun JsonUtils.toJsonTree(inputStream: InputStream) : JsonNode {
-    return objectMapper.readTree(inputStream)
+    fun toJsonTree(inputStream: InputStream) : JsonNode {
+        return objectMapper.readTree(inputStream)
+    }
+
+    fun writeValue(outputStream: OutputStream, obj : Any) {
+        objectMapper.writeValue(outputStream, obj)
+    }
 }
 
 infix fun <T> JsonNode.asValue(type : Class<T>) : T {

@@ -44,7 +44,7 @@ abstract class ViewController {
     /**
      * Application Context
      * */
-    val context = ApplicationContext.instance
+    val context = ApplicationContext
 
     init {
         uiDispatch {

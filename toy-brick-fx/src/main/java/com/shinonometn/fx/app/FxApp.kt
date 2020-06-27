@@ -3,7 +3,6 @@ package com.shinonometn.fx.app
 import com.shinonometn.fx.JsonUtils
 import com.shinonometn.fx.assets.resourceStream
 import com.shinonometn.fx.dispatching.fxDispatch
-import com.shinonometn.fx.toJsonTree
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Parent
@@ -25,30 +24,22 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
     /**
      * The context of this app
      * */
-    val context by lazy {
-        ApplicationContext.context
-    }
+    val context by lazy { ApplicationContext }
 
     /**
      * The root scene of this app
      * */
-    val scene by lazy {
-        ApplicationContext.instance.rootStage.scene
-    }
+    val scene by lazy { ApplicationContext.scene }
 
     /**
      * The main window of this app
      * */
-    val window by lazy {
-        ApplicationContext.window
-    }
+    val window by lazy { ApplicationContext.window }
 
     /**
      * The primary stage of this app
      * */
-    val stage by lazy {
-        ApplicationContext.instance.stage
-    }
+    val stage by lazy { ApplicationContext.stage }
 
     /**
      * Name of the application
@@ -73,8 +64,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
      * The start-up of ToyBrickFx framework
      * */
     override fun start(primaryStage: Stage) {
-        ApplicationContext.context = FxAppContextImpl(primaryStage, this)
-        ApplicationContext.app = this
+        ApplicationContext.init(this, primaryStage)
 
         /* Start config the app view */
         primaryStage.scene = Scene(entryView())
@@ -86,7 +76,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
         init?.let { it(primaryStage) }
 
         fxDispatch {
-            if(showMainWindowAfterInit) primaryStage.show()
+            if (showMainWindowAfterInit) primaryStage.show()
         }
     }
 

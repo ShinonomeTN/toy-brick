@@ -1,22 +1,16 @@
-package com.shinonometn.fx.app
+package com.shinonometn.fx.config
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
-import javafx.scene.image.Image
 import javafx.stage.Stage
-import javafx.stage.Window
 import java.io.File
 import java.io.FileOutputStream
 
 import com.shinonometn.fx.*
-import com.shinonometn.fx.assets.resourceStream
+import com.shinonometn.fx.app.FxApp
 import kotlin.properties.Delegates
 
 class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
-
-    val window: Window = rootStage
-
-    val scene = rootStage.scene
 
     val stage = rootStage
 
@@ -70,9 +64,9 @@ class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
     }
 
     fun saveSettings() {
-        val destFile = "./settings.json"
+        val destFile = configurationFile
         val map = configurations.entries.map { it.key to it.value.properties }.toMap()
-        JsonUtils.objectMapper.writeValue(FileOutputStream(File(destFile)), map)
+        JsonUtils.writeValue(FileOutputStream(destFile), map)
     }
 
     fun registerSetting(appSettingBean: AppSettingBean) {

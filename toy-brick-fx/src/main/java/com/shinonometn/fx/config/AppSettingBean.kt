@@ -1,9 +1,9 @@
-package com.shinonometn.fx.app
+package com.shinonometn.fx.config
 
 import javafx.collections.FXCollections
 import javafx.collections.ObservableMap
 
-open class AppSettingBean(val name: String) {
+abstract class AppSettingBean(val name: String) {
     private val propertyMap: ObservableMap<String, Any> = FXCollections.observableHashMap()
 
     var properties: MutableMap<String, Any>
