@@ -1,6 +1,9 @@
 {
   "application": {
-    "name": "Demo",
-    "icon" : "/app_icon.png"
+    "name": "ToyBrickDemo",
+    "windowTitle" : "Demo",
+    "icon" : "/app_icon.png",
+    "exitOnClose": true,
+    "showMainWindowAfterInit" : true
   }
 }

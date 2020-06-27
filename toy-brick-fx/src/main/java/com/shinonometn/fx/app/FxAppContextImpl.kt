@@ -2,7 +2,6 @@ package com.shinonometn.fx.app
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
-import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import javafx.stage.Window
@@ -11,37 +10,56 @@ import java.io.FileOutputStream
 
 import com.shinonometn.fx.*
 import com.shinonometn.fx.assets.resourceStream
+import kotlin.properties.Delegates
 
-class FxAppContextImpl(internal val rootStage: Stage) {
+class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
 
     val window: Window = rootStage
 
-    var windowTitle: String by rootStage.titleProperty()
+    val scene by lazy {
+        ApplicationContext.instance.stage.scene
+    }
 
+    val stage = rootStage
+
+    /**
+     * Application configuration file path
+     * */
+    var configurationFile = File("./settings.json")
+        private set
+
+    /**
+     * Set the configuration should persistent when app exit
+     * */
+    var persistentSettingsOnExit by Delegates.observable(true) { _, _ , new ->
+        if(new) onEnableConfigPersistent() else onDisableConfigPersistent()
+    }
+    private fun onDisableConfigPersistent() {
+        app.removeExitAction(saveConfigurationOnExitAction)
+    }
+    private fun onEnableConfigPersistent() {
+        app.addExitAction(saveConfigurationOnExitAction)
+    }
+    private val saveConfigurationOnExitAction = { saveSettings() }
+
+    /**
+    * The current application configuration storage
+    * */
     private val configurations = HashMap<String, AppSettingBean>()
 
+    /**
+     * Application configuration snapshot on start up
+     * */
     private var appSettingTree: JsonNode? = null
 
     init {
-        /* If has custom setting for app, configure app */
-        resourceStream("/app.json")?.let {
-            handleAppInfo(JsonUtils.objectMapper.readTree(it))
-        }
-
-
         val settingFile = File("./settings.json")
         if (settingFile.exists()) {
             appSettingTree = JsonUtils.toJsonTree(settingFile)
         }
 
-        window.width = 640.0
-        window.height = 480.0
-
-        rootStage.apply {
-            setOnCloseRequest {
-                saveSettings()
-                Platform.exit()
-            }
+        app.addExitAction {
+            saveSettings()
         }
     }
 
@@ -50,7 +68,7 @@ class FxAppContextImpl(internal val rootStage: Stage) {
         val application = tree["application"] ?: return
 
         application["name"]?.let {
-            windowTitle = it.asText()
+            stage.title = it.asText()
         }
 
         application["icon"]?.let {

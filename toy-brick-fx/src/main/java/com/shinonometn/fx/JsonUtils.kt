@@ -14,6 +14,10 @@ fun JsonUtils.toJsonTree(file : File) : JsonNode {
     return objectMapper.readTree(file)
 }
 
+fun JsonUtils.toJsonTree(inputStream: InputStream) : JsonNode {
+    return objectMapper.readTree(inputStream)
+}
+
 infix fun <T> JsonNode.asValue(type : Class<T>) : T {
     return JsonUtils.objectMapper.treeAsTokens(this).readValueAs(type)
 }

@@ -1,6 +1,9 @@
 package com.shinonometn.fx.app
 
+import com.shinonometn.fx.JsonUtils
+import com.shinonometn.fx.assets.resourceStream
 import com.shinonometn.fx.dispatching.fxDispatch
+import com.shinonometn.fx.toJsonTree
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Parent
@@ -23,7 +26,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
      * The context of this app
      * */
     val context by lazy {
-        ApplicationContext.context!!
+        ApplicationContext.context
     }
 
     /**
@@ -33,34 +36,94 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
         ApplicationContext.instance.rootStage.scene
     }
 
+    /**
+     * The main window of this app
+     * */
+    val window by lazy {
+        ApplicationContext.window
+    }
+
+    /**
+     * The primary stage of this app
+     * */
+    val stage by lazy {
+        ApplicationContext.instance.stage
+    }
+
+    /**
+     * Name of the application
+     * */
+    var name: String = "ToyBrickDemo"
+        internal set
+
+    /**
+     * Should the application exit when main window close requested
+     * */
+    var exitOnClose = true
+
     private val onExitActions: MutableList<() -> Unit> = ArrayList()
 
+    /**
+     * Should the app show main window after initialized
+     * */
+    var showMainWindowAfterInit = true
+        internal set
+
+    /**
+     * The start-up of ToyBrickFx framework
+     * */
     override fun start(primaryStage: Stage) {
-        ApplicationContext.context = FxAppContextImpl(primaryStage)
+        ApplicationContext.context = FxAppContextImpl(primaryStage, this)
+        ApplicationContext.app = this
 
         /* Start config the app view */
         primaryStage.scene = Scene(entryView())
-        defaultStageConfiguration(primaryStage)
+
+        defaultStageConfiguration()
+        appJsonConfiguration()
+
+        /* Invoke the user code block if provided */
         init?.let { it(primaryStage) }
 
         fxDispatch {
-            primaryStage.show()
+            if(showMainWindowAfterInit) primaryStage.show()
         }
     }
 
-    private fun defaultStageConfiguration(stage: Stage) = with(stage) {
+    /* Configuration helpers */
+
+    /**
+     * Basic configuration of the ToyBrickFx
+     * */
+    private fun defaultStageConfiguration() = with(stage) {
         /* The default window size */
         width = 640.0
         height = 480.0
 
         setOnCloseRequest {
             onAppExitRequested()
-            Platform.exit()
         }
     }
 
+    /**
+     * Configure the application with user's distribution settings
+     * */
+    private fun appJsonConfiguration() {
+        /* If has custom setting for app, configure app */
+        resourceStream("/app.json")?.let {
+            fxAppConfigurationHandler(this, JsonUtils.toJsonTree(it)["application"])
+        }
+    }
+
+    /**
+     * Action to exit the application.
+     * It will be invoke when the main window closing requested.
+     *
+     * Invoke directly will trigger the close phase
+     * */
     fun onAppExitRequested() {
         onExitActions.forEach { it() }
+        if (exitOnClose) Platform.exit()
     }
 
     /**

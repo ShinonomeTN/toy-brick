@@ -70,8 +70,6 @@ class DemoApp : FxApp(entryView = {
         }
     }){}.view as Parent
 
-}, init = {
-    context.windowTitle = "Hello toy-brick-fx-demo !"
 })
 
 fun main(args: Array<String>) {
