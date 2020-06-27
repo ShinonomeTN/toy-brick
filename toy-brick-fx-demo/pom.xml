@@ -10,7 +10,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.shinonometn</groupId>
     <artifactId>toy-brick-fx-demo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -25,7 +24,7 @@
         <dependency>
             <groupId>com.shinonometn</groupId>
             <artifactId>toy-brick-fx</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
