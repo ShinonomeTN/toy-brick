@@ -20,8 +20,9 @@ object ApplicationContext {
     /**
      * Main scene of this application
      * */
-    lateinit var scene : Scene
-        private set
+    val scene : Scene by lazy {
+        stage.scene
+    }
 
     /**
      * Main stage of this application
@@ -36,8 +37,7 @@ object ApplicationContext {
      * */
     internal fun init(app : FxApp, primaryStage: Stage) {
         this.app = app
-        this.window = primaryStage
-        this.scene = primaryStage.scene
         this.stage = primaryStage
+        this.window = primaryStage
     }
 }

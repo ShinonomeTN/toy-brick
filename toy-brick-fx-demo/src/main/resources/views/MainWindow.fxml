@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" prefHeight="400.0" prefWidth="600.0"
+            style="
+            -fx-background-radius: 10pt; -fx-border-radius: 10pt;
+            -fx-border-color: #ffffff; -fx-border-width: 1pt;
+            -fx-background-color: whitesmoke"
+>
+    <top>
+        <VBox alignment="CENTER">
+            <Label style="-fx-font-weight: blod; -fx-font-size: 20pt; -fx-padding: 5pt;">Hello, JavaFx!</Label>
+        </VBox>
+    </top>
+    <center>
+        <VBox style="-fx-padding: 5pt; -fx-spacing: 3pt">
+            <TextField fx:id="textField" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+            <Label fx:id="label" VBox.vgrow="ALWAYS" style="-fx-padding: 5pt" alignment="CENTER">Input something</Label>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox style="-fx-padding: 5pt; -fx-spacing: 3pt">
+            <Button VBox.vgrow="ALWAYS" fx:id="button" maxWidth="Infinity">Show dialog</Button>
+            <Button VBox.vgrow="ALWAYS" fx:id="exitButton" maxWidth="Infinity">Exit</Button>
+        </VBox>
+    </bottom>
+</BorderPane>
