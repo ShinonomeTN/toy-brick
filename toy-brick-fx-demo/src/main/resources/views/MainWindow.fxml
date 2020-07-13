@@ -12,7 +12,7 @@
 >
     <top>
         <VBox alignment="CENTER">
-            <Label style="-fx-font-weight: blod; -fx-font-size: 20pt; -fx-padding: 5pt;">Hello, JavaFx!</Label>
+            <Label style="-fx-font-weight: bold; -fx-font-size: 20pt; -fx-padding: 5pt;">Hello, JavaFx!</Label>
         </VBox>
     </top>
     <center>

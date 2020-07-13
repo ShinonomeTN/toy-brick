@@ -1,16 +1,26 @@
 package com.shinonometn.fx
 
+import com.shinonometn.fx.app.FxApp
 import com.shinonometn.fx.assets.resource
+import javafx.application.Application
 import javafx.beans.value.ObservableValue
 import javafx.beans.value.WeakChangeListener
 import javafx.fxml.FXMLLoader
 import javafx.scene.Node
+import kotlin.reflect.KClass
 
 object Fx {
     private var fxmlClassPaths = "views"
 
     val FXML_CLASS_PATH: String
         get() = fxmlClassPaths
+}
+
+/**
+ * Launch the FxApp
+ * */
+fun <A : FxApp> launchFxApp(appClazz : KClass<A>, args: Array<String>) {
+    Application.launch(appClazz.java, *args)
 }
 
 /*
