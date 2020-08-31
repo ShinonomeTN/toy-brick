@@ -1,9 +1,9 @@
 module toy.brick.fx {
     requires java.management;
 
+    requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.controls;
-    requires javafx.fxml;
 
     requires kotlin.stdlib;
     requires kotlinx.coroutines.core;
