@@ -6,8 +6,10 @@ import javafx.event.ActionEvent
 import javafx.scene.Node
 import javafx.scene.control.ButtonBase
 import com.shinonometn.fx.app.ApplicationContext
+import com.shinonometn.fx.assets.resource
 import com.shinonometn.fx.dispatching.uiDispatch
 import com.shinonometn.fx.fxLoadView
+import javafx.fxml.FXMLLoader
 
 abstract class ViewController {
 
@@ -23,13 +25,23 @@ abstract class ViewController {
     val view: Node
 
     /**
+     * FXML loader
+     * */
+    lateinit var fxmlLoader : FXMLLoader
+
+    /**
      * Create a ViewController with a FXML
      * [fxmlViewName] is the FXML file name, it's the path to FXML file.
      * @see com.shinonometn.fx.Fx
      * */
-    constructor(fxmlViewName: String) {
-        this.name = fxmlViewName
-        this.view = fxLoadView(fxmlViewName)
+    constructor(fxml: String) {
+        this.name = fxml.replace("/",".").substring(0, fxml.lastIndexOf(".") - 1)
+        fxmlLoader = FXMLLoader(resource("/$fxml"))
+        this.view = fxmlLoader.load()
+
+        uiDispatch {
+            afterInit()
+        }
     }
 
     /**
@@ -39,18 +51,16 @@ abstract class ViewController {
     constructor(viewProvider: () -> Node, name : String? = null) {
         this.view = viewProvider()
         this.name = name
+
+        uiDispatch {
+            afterInit()
+        }
     }
 
     /**
      * Application Context
      * */
     val context = ApplicationContext
-
-    init {
-        uiDispatch {
-            afterInit()
-        }
-    }
 
     /**
      * Children can do something after initialized.
@@ -60,34 +70,13 @@ abstract class ViewController {
         // default do nothing
     }
 
-    /**
-     * Some useful function for children
-     * */
-
-    protected fun <T> watchOn(
-            vararg observableValue: ObservableValue<T>,
-            action: (observable: ObservableValue<out T>, oldValue: T, newValue: T) -> Unit
-    ) {
-        observableValue.forEach {
-            it.addListener { a, b, c -> action.invoke(a, b, c) }
-        }
+    @Suppress("UNCHECKED_CAST")
+    protected fun <T> fxId(id : String) : Lazy<T> = lazy {
+        fxmlLoader.namespace[id] as T
     }
 
-    protected fun <T> watchOn(vararg observableValue: ObservableValue<T>, action: (newValue: T) -> Unit) {
-        observableValue.forEach {
-            it.addListener { _, _, c -> action.invoke(c) }
-        }
-    }
-
-    protected infix fun <T> ObservableValue<T>.onChange(action: (newValue: T) -> Unit) {
-        addListener { _, _, c -> action(c) }
-    }
-
-    protected infix fun Observable.onInvalidate(block: (Observable) -> Unit) {
-        addListener { block(it) }
-    }
-
-    protected infix fun ButtonBase.onAction(block: (ActionEvent) -> Unit) {
-        setOnAction { block(it) }
+    @Suppress("UNCHECKED_CAST")
+    protected fun <T> cssId(id : String) : Lazy<T> = lazy {
+        view.lookup("#${id}") as T
     }
 }

@@ -7,11 +7,11 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
 
-class MainWindowController : ViewController("MainWindow") {
-    @FXML lateinit var label: Label
-    @FXML lateinit var textField: TextField
-    @FXML lateinit var button: Button
-    @FXML lateinit var exitButton: Button
+class MainWindowController : ViewController("views/MainWindow.fxml") {
+    private val label: Label by fxId("label")
+    private val textField: TextField by fxId("textField")
+    private val button: Button by fxId("button")
+    private val exitButton: Button by fxId("exitButton")
 
     private var xOffset = 0.0
     private var yOffset = 0.0
