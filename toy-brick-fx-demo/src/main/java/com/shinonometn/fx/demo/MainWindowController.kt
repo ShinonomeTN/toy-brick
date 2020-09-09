@@ -8,10 +8,10 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 
 class MainWindowController : ViewController("views/MainWindow.fxml") {
-    private val label: Label by fxId("label")
-    private val textField: TextField by fxId("textField")
-    private val button: Button by fxId("button")
-    private val exitButton: Button by fxId("exitButton")
+    private val label: Label by fxId()
+    private val textField: TextField by fxId()
+    private val button: Button by fxId()
+    private val exitButton: Button by fxId()
 
     private var xOffset = 0.0
     private var yOffset = 0.0

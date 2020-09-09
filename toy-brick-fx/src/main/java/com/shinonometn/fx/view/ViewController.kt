@@ -1,15 +1,15 @@
 package com.shinonometn.fx.view
 
-import javafx.beans.Observable
-import javafx.beans.value.ObservableValue
-import javafx.event.ActionEvent
-import javafx.scene.Node
-import javafx.scene.control.ButtonBase
 import com.shinonometn.fx.app.ApplicationContext
 import com.shinonometn.fx.assets.resource
 import com.shinonometn.fx.dispatching.uiDispatch
-import com.shinonometn.fx.fxLoadView
 import javafx.fxml.FXMLLoader
+import javafx.scene.Node
+import javafx.scene.Parent
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
+
+typealias ViewProvider = () -> Parent
 
 abstract class ViewController {
 
@@ -22,12 +22,12 @@ abstract class ViewController {
     /**
      * View node of this controller
      */
-    val view: Node
+    val view: Parent
 
     /**
      * FXML loader
      * */
-    lateinit var fxmlLoader : FXMLLoader
+    lateinit var fxmlLoader: FXMLLoader
 
     /**
      * Create a ViewController with a FXML
@@ -35,7 +35,7 @@ abstract class ViewController {
      * @see com.shinonometn.fx.Fx
      * */
     constructor(fxml: String) {
-        this.name = fxml.replace("/",".").substring(0, fxml.lastIndexOf(".") - 1)
+        this.name = fxml.replace("/", ".").substring(0, fxml.lastIndexOf(".") - 1)
         fxmlLoader = FXMLLoader(resource("/$fxml"))
         this.view = fxmlLoader.load()
 
@@ -48,7 +48,7 @@ abstract class ViewController {
      * Create a ViewController with [viewProvider]
      * View [name] is optional.
      * */
-    constructor(viewProvider: () -> Node, name : String? = null) {
+    constructor(viewProvider: ViewProvider, name: String? = null) {
         this.view = viewProvider()
         this.name = name
 
@@ -71,12 +71,21 @@ abstract class ViewController {
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun <T> fxId(id : String) : Lazy<T> = lazy {
+    protected fun <T> fxId(id: String): Lazy<T> = lazy {
         fxmlLoader.namespace[id] as T
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun <T> cssId(id : String) : Lazy<T> = lazy {
+    protected fun <T> fxId() = object : ReadOnlyProperty<ViewController, T> {
+        private var node : Any? = null
+        override fun getValue(thisRef: ViewController, property: KProperty<*>): T {
+            if(node == null) node = thisRef.fxmlLoader.namespace[property.name]
+            return ((node ?: error("Node with id [${property.name}] not found!")) as T)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    protected fun <T> cssId(id: String): Lazy<T> = lazy {
         view.lookup("#${id}") as T
     }
 }
