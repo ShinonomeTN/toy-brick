@@ -19,7 +19,7 @@ object Fx {
 /**
  * Launch the FxApp
  * */
-fun <A : FxApp> launchFxApp(appClazz : KClass<A>, args: Array<String>) {
+fun <A : FxApp> launchFxApp(appClazz: KClass<A>, args: Array<String>) {
     Application.launch(appClazz.java, *args)
 }
 
@@ -52,34 +52,6 @@ fun <T : Any, N : Node> T.fxLoadView(viewDomainName: String): N = FXMLLoader(res
  * */
 fun asStylesheetName(name: String): String {
     return Fx::class.java.getResource(resourcePathFromDomainName("$name.css")).toExternalForm()
-}
-
-/*
-*
-*
-*
-* */
-
-fun <T> listenOnProperty(observableValue: ObservableValue<T>, action: (ObservableValue<out T>, T, T) -> Unit) {
-    observableValue.addListener { a, b, c -> action.invoke(a, b, c) }
-}
-
-fun <T> listenOnProperty(vararg observableValue: ObservableValue<T>, action: (ObservableValue<out T>, T, T) -> Unit) {
-    observableValue.forEach {
-        it.addListener { a, b, c -> action.invoke(a, b, c) }
-    }
-}
-
-fun <T> weakListenOnProperty(observableValue: ObservableValue<T>, action: (ObservableValue<out T>, T, T) -> Unit): WeakChangeListener<T> {
-    val result = WeakChangeListener<T> { a, b, c -> action.invoke(a, b, c) }
-    observableValue.addListener(result)
-    return result
-}
-
-fun <T> weakListenOnProperty(vararg observableValue: ObservableValue<T>, action: (ObservableValue<out T>, T, T) -> Unit): WeakChangeListener<T> {
-    val result = WeakChangeListener<T> { a, b, c -> action.invoke(a, b, c) }
-    observableValue.forEach { it.addListener(result) }
-    return result
 }
 
 /*

@@ -2,7 +2,7 @@ package com.shinonometn.fx.app
 
 import com.shinonometn.fx.JsonUtils
 import com.shinonometn.fx.assets.resourceStream
-import com.shinonometn.fx.dispatching.fxDispatch
+import com.shinonometn.fx.dispatching.runInFx
 import javafx.application.Application
 import javafx.application.Platform
 import javafx.scene.Parent
@@ -75,7 +75,7 @@ abstract class FxApp(val entryView: () -> Parent, private val init: (FxApp.(stag
         /* Invoke the user code block if provided */
         init?.let { it(primaryStage) }
 
-        fxDispatch {
+        runInFx {
             if (showMainWindowAfterInit) primaryStage.show()
         }
     }

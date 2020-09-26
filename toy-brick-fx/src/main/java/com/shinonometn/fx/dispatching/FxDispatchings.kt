@@ -7,16 +7,33 @@ import kotlinx.coroutines.javafx.JavaFx
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-fun fxDispatch(task: () -> Unit) {
-    Platform.runLater { task.invoke() }
+fun runInFx(task: () -> Unit) = Platform.runLater {
+    task.invoke()
 }
 
-fun uiDispatch(block: suspend CoroutineScope.() -> Unit) = CoroutineScope(Dispatchers.JavaFx).apply {
-    launch(context = this.coroutineContext, block = block)
-}
-//suspend fun <R> uiDispatch(block: suspend CoroutineScope.() -> R) = withContext(Dispatchers.JavaFx, block)
+/**
+ * Dispatch work to ui threads
+**/
+fun uiDispatch(block: suspend CoroutineScope.() -> Unit) =
+        CoroutineScope(Dispatchers.JavaFx).launch(block = block)
 
-fun ioDispatch(block: suspend CoroutineScope.() -> Unit) = CoroutineScope(Dispatchers.IO).apply {
-    launch(context = this.coroutineContext, block = block)
+/**
+ * Dispatch work to ui coroutine scope
+ */
+suspend fun <T> ui(block: suspend CoroutineScope.() -> T): T = withContext(Dispatchers.JavaFx) {
+    block.invoke(this)
 }
-//suspend fun <R> ioDispatch(block: suspend CoroutineScope.() -> R) = withContext(Dispatchers.IO, block)
+
+/**
+ * Dispatch work to io threads
+ **/
+fun ioDispatch(block: suspend CoroutineScope.() -> Unit) =
+        CoroutineScope(Dispatchers.IO).launch(block = block)
+
+/**
+ * Dispatch work to io coroutine scope
+ */
+suspend fun <T> io(block: suspend CoroutineScope.() -> T): T = withContext(Dispatchers.IO) {
+    block.invoke(this)
+}
+
