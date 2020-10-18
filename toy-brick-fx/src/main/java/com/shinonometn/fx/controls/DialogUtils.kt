@@ -21,8 +21,9 @@ fun alert(
     this.headerText = header
     this.contentText = content
 
-    buttons.let {
-        this.buttonTypes.addAll(buttons)
+    if(buttons.isNotEmpty()) with(buttonTypes) {
+        clear()
+        addAll(buttons)
     }
 
     configure?.invoke(this)
