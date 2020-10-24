@@ -12,5 +12,5 @@ class DemoApp : FxApp(entryView = { MainWindow.view as Parent }, init = {
 })
 
 fun main(args: Array<String>) {
-    launchFxApp(DemoApp::class, args)
+    launchFxApp<DemoApp>(args)
 }

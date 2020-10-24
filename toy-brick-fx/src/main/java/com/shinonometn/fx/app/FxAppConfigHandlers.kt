@@ -14,7 +14,7 @@ private val handlerMap = mapOf<String, ConfigHandler>(
         "showMainWindowAfterInit" to { app, node -> app.showMainWindowAfterInit = node.asBoolean() }
 )
 
-fun fxAppConfigurationHandler(app : FxApp, json: JsonNode) {
+fun fxAppConfigurationHandler(app: FxApp, json: JsonNode) {
     for (key in handlerMap.keys) {
         json[key]?.let {
             (handlerMap[key] ?: error("Unexpected no config handler for $key"))(app, it)

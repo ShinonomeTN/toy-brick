@@ -2,15 +2,15 @@ package com.shinonometn.fx.config
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.shinonometn.fx.JsonUtils
+import com.shinonometn.fx.app.FxApp
+import com.shinonometn.fx.asValue
 import javafx.stage.Stage
 import java.io.File
 import java.io.FileOutputStream
-
-import com.shinonometn.fx.*
-import com.shinonometn.fx.app.FxApp
 import kotlin.properties.Delegates
 
-class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
+class FxAppContextImpl(internal val rootStage: Stage, val app: FxApp) {
 
     val stage = rootStage
 
@@ -23,20 +23,23 @@ class FxAppContextImpl(internal val rootStage: Stage, val app : FxApp) {
     /**
      * Set the configuration should persistent when app exit
      * */
-    var persistentSettingsOnExit by Delegates.observable(false) { _, _ , new ->
-        if(new) onEnableConfigPersistent() else onDisableConfigPersistent()
+    var persistentSettingsOnExit by Delegates.observable(false) { _, _, new ->
+        if (new) onEnableConfigPersistent() else onDisableConfigPersistent()
     }
+
     private fun onDisableConfigPersistent() {
         app.removeExitAction(saveConfigurationOnExitAction)
     }
+
     private fun onEnableConfigPersistent() {
         app.addExitAction(saveConfigurationOnExitAction)
     }
+
     private val saveConfigurationOnExitAction = { saveSettings() }
 
     /**
-    * The current application configuration storage
-    * */
+     * The current application configuration storage
+     * */
     private val configurations = HashMap<String, AppSettingBean>()
 
     /**

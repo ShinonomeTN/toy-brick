@@ -8,26 +8,26 @@ object ApplicationContext {
     /**
      * The app instance
      * */
-    lateinit var app : FxApp
+    lateinit var app: FxApp
         internal set
 
     /**
      * Main window of this application
      * */
-    lateinit var window : Window
+    lateinit var window: Window
         private set
 
     /**
      * Main scene of this application
      * */
-    val scene : Scene by lazy {
+    val scene: Scene by lazy {
         stage.scene
     }
 
     /**
      * Main stage of this application
      * */
-    lateinit var stage : Stage
+    lateinit var stage: Stage
         private set
 
     /**
@@ -35,7 +35,7 @@ object ApplicationContext {
      *
      * This function should be invoke only once and invoke by FxApp
      * */
-    internal fun init(app : FxApp, primaryStage: Stage) {
+    internal fun init(app: FxApp, primaryStage: Stage) {
         this.app = app
         this.stage = primaryStage
         this.window = primaryStage

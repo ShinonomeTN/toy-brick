@@ -12,6 +12,7 @@ import kotlin.reflect.KProperty
 *
 * */
 operator fun <T> ObservableValue<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
+
 operator fun <T> Property<T>.getValue(thisRef: Any, property: KProperty<*>): T = value
 operator fun ReadOnlyDoubleProperty.getValue(thisRef: Any, property: KProperty<*>): Double = value
 

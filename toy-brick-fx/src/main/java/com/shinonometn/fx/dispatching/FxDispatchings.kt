@@ -13,7 +13,7 @@ fun runInFx(task: () -> Unit) = Platform.runLater {
 
 /**
  * Dispatch work to ui threads
-**/
+ **/
 fun uiDispatch(block: suspend CoroutineScope.() -> Unit) =
         CoroutineScope(Dispatchers.JavaFx).launch(block = block)
 

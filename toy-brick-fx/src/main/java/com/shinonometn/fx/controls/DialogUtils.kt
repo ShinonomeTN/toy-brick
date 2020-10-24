@@ -10,18 +10,18 @@ import javafx.scene.control.ButtonType
 typealias AlertType = Alert.AlertType
 
 fun alert(
-        alertType : Alert.AlertType = AlertType.INFORMATION,
-        title : String = "",
-        header : String = "",
-        content : String = "",
-        vararg buttons : ButtonType,
-        configure : (Alert.() -> Unit)? = null
+        alertType: Alert.AlertType = AlertType.INFORMATION,
+        title: String = "",
+        header: String = "",
+        content: String = "",
+        vararg buttons: ButtonType,
+        configure: (Alert.() -> Unit)? = null
 ) = Alert(alertType).apply {
     this.title = title
     this.headerText = header
     this.contentText = content
 
-    if(buttons.isNotEmpty()) with(buttonTypes) {
+    if (buttons.isNotEmpty()) with(buttonTypes) {
         clear()
         addAll(buttons)
     }

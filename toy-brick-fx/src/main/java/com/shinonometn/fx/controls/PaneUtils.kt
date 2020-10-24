@@ -13,10 +13,10 @@ infix fun Pane.beParentOf(child: Node) {
     children.add(child)
 }
 
-infix fun Pane.beParentOf(children : Collection<Node>) {
+infix fun Pane.beParentOf(children: Collection<Node>) {
     this.children.addAll(children)
 }
 
-fun Pane.beParentOf(vararg children : Node) {
+fun Pane.beParentOf(vararg children: Node) {
     this.children.addAll(children)
 }

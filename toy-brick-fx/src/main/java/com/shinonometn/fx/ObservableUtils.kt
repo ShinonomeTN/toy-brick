@@ -15,7 +15,7 @@ import javafx.beans.value.WeakChangeListener
  */
 class ListeningContext<T>(
         val listener: ChangeListener<T>,
-        val observable : List<ObservableValue<T>>
+        val observable: List<ObservableValue<T>>
 ) {
     fun unregister() = observable.forEach {
         it.removeListener(listener)
@@ -34,8 +34,8 @@ fun <T> listenOnProperty(
         observableValue: ObservableValue<T>,
         action: (observable: ObservableValue<out T>, oldValue: T, newValue: T) -> Unit
 ): ListeningContext<T> {
-    val listener = ChangeListener<T> { a,b,c ->
-        action.invoke(a,b,c)
+    val listener = ChangeListener<T> { a, b, c ->
+        action.invoke(a, b, c)
     }
     observableValue.addListener(listener)
     return ListeningContext(listener, listOf(observableValue))
@@ -45,8 +45,8 @@ fun <T> listenOnProperty(
         vararg observableValue: ObservableValue<T>,
         action: (observable: ObservableValue<out T>, T, T) -> Unit
 ): ListeningContext<T> {
-    val listener = ChangeListener<T> { a,b,c ->
-        action.invoke(a,b,c)
+    val listener = ChangeListener<T> { a, b, c ->
+        action.invoke(a, b, c)
     }
     observableValue.forEach {
         it.addListener(listener)
@@ -60,13 +60,13 @@ fun <T> listenOnProperty(
  */
 fun <T> listenNewValue(
         observableValue: ObservableValue<T>,
-        action: (newValue :T) -> Unit
-) : ListeningContext<T> {
-    val listener = ChangeListener<T> { _,_,c ->
+        action: (newValue: T) -> Unit
+): ListeningContext<T> {
+    val listener = ChangeListener<T> { _, _, c ->
         action.invoke(c)
     }
     observableValue.addListener(listener)
-    return ListeningContext(listener,listOf(observableValue))
+    return ListeningContext(listener, listOf(observableValue))
 }
 
 fun <T> weakListenOnProperty(observableValue: ObservableValue<T>, action: (ObservableValue<out T>, T, T) -> Unit): WeakChangeListener<T> {
