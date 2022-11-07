@@ -4,5 +4,6 @@
 rootProject.name = "toy-brick"
 
 include(
+    ":toy-brick-common",
     ":toy-brick-fx", ":toy-brick-fx-demo"
 )
