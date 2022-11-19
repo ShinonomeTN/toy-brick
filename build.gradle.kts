@@ -39,38 +39,3 @@ subprojects {
         kotlinOptions.jvmTarget = "11"
     }
 }
-
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-//
-//plugins {
-//    kotlin("jvm") version "1.7.0"
-//    id("org.openjfx.javafxplugin") version "0.0.8" apply false
-//}
-//
-//
-//subprojects {
-//
-//    publishing {
-//        repositories {
-//            maven {
-//                name = "shinonometn"
-//
-//                def releasesRepoUrl = "https://nexus.shinonometn.com/repository/maven-releases/"
-//                def snapshotsRepoUrl = "https://nexus.shinonometn.com/repository/maven-snapshots/"
-//                url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
-//
-//                credentials {
-//                    // Stored in ~/.gradle/gradle.properties
-//                    username "$mavenUsername"
-//                    password "$mavenPassword"
-//                }
-//            }
-//        }
-//
-//        publications {
-//            maven(MavenPublication) {
-//                from(components.java)
-//            }
-//        }
-//    }
-//}
